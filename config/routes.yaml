@@ -1,0 +1,15 @@
+controllers:
+    resource:
+        path: ../src/Controller/
+        namespace: App\Controller
+    type: attribute
+google_login:
+    path: /google-login
+    controller: App\Controller\GoogleController::connectAction
+
+form_login:
+    path: /login
+
+auth:
+    path: /auth
+    methods: ['POST']

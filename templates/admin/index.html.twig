@@ -1,0 +1,107 @@
+
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello Admin!{% endblock %}
+
+
+    {% block body %}
+        <style>
+            .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+            .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+        </style>
+
+        <style>
+            .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+            .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+        </style>
+
+        <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-header">
+                        Filter
+                    </div>
+                    <div class="card-body">
+                        {{ form_start(searchForm, {'attr': {'class': 'form-horizontal'}}) }}
+                        <div class="mb-3">
+                            {{ form_label(searchForm.searchBar) }}
+                            {{ form_widget(searchForm.searchBar) }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form_label(searchForm.category) }}
+                            {{ form_widget(searchForm.category) }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form_label(searchForm.categoryChild) }}
+                            {{ form_widget(searchForm.categoryChild) }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form_label(searchForm.userAjout) }}
+                            {{ form_widget(searchForm.userAjout) }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form_label(searchForm.valueMin) }}
+                            {{ form_widget(searchForm.valueMin) }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form_label(searchForm.valueMax) }}
+                            {{ form_widget(searchForm.valueMax) }}
+                        </div>
+                        {{ form_widget(searchForm.valider, {'attr': {'class': 'btn btn-success'}}) }}
+                        {{ form_end(searchForm) }}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <h2 class="text-center">Toutes les nfts </h2>
+                <div class="row">
+                    {% for nft in nfts %}
+                        <div class="card m-3" style="width: 22rem;">
+                            <img class="img-fluid m-3 align-self-center" width="150" height="150" src="{{ 'http://localhost/nftMarketplace/uploads/' ~ nft.image }}" alt"affiche {{nft.name}}">
+                            <div class="card-body">
+                                <h5 class="card-title text-center">{{ nft.name }}</h5>
+                                <ul>
+                                    <li> Nombre de Nft de disponible : {{ nft.quantity }}</li>
+                                    <li> Prix : {{ nft.price }}</li>
+                                    <li> Category : {{ nft.category.wording }}</li>
+                                </ul>
+                                <a href="{{ path('app_nft_show', {'id': nft.id}) }}" class="btn btn-primary">Voir</a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    {%  if nfts|length ==0 %}
+                        <div class ='text_danger'>
+                            Aucun résultat ne correspond à votre recherche.
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <script>
+            window.onload = () => {
+                let category = document.querySelector('#search_category');
+                category.addEventListener('change', function() {
+                    let form = this.closest("form");
+                    let data = this.name +"=" + this.value;
+                    fetch(form.action, {
+                        method: form.getAttribute('method'),
+                        body: data,
+                        headers : {
+                            "Content-Type" :"application/x-www-form-urlencoded;charset:utf-8"
+                        }
+                    })
+                        .then(response =>response.text())
+                        .then(html => {
+                            let content = document.createElement("html");
+                            content.innerHTML = html;
+                            let newContent = content.querySelector('#search_categoryChild');
+                            document.querySelector('#search_categoryChild').replaceWith(newContent);
+                            console.log(newContent);
+                        })
+                })
+            };
+        </script>
+    {% endblock %}
+

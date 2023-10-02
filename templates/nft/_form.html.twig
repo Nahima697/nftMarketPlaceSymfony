@@ -1,0 +1,76 @@
+{#{{ form_start(form) }}#}
+{#    {{ form_widget(form) }}#}
+{#    <button class="btn">{{ button_label|default('Save') }}</button>#}
+{#{{ form_end(form) }}#}
+<div class="container bg-body-secondary">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            {{ form_start(form) }}
+            <div class="form-group">
+                {{ form_label(form.name) }}
+                {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.description) }}
+                {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
+            </div>
+            <div class="form-group">
+                {{ form_label(form.dateSortie) }}
+                {{ form_widget(form.dateSortie, {'attr': {'class': 'form-control'}}) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.duree) }}
+                {{ form_widget(form.duree, {'attr': {'class': 'form-control'}}) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.categories) }}
+                {{ form_widget(form.categories, {'attr': {'class': 'form-control'}}) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.type) }}
+                {{ form_widget(form.type, {'attr': {'class': 'form-control'}}) }}
+            </div>
+            <div class="form-group">
+                {{ form_label(form.imageFile) }}
+                {{ form_widget(form.imageFile, {'attr': {'class': 'form-control'}}) }}
+            </div>
+            <div class="form-group">
+                {{ form_label(form.peopleCheck) }}
+                {{ form_widget(form.peopleCheck, {'attr': {'class': 'form-check-input'}}) }}
+            </div>
+            <button class="btn btn-success">{{ button_label|default('enregistrer') }}</button>
+
+
+            <div id="extraForm" style="display: none;">
+                <button type="button" id="add_person" data-collection-holder-class="person btn btn-primary">Ajouter une personne</button>
+                <ul class="people">
+
+                    {% for person in form.people %}
+                        <li>
+                            {{ form_widget(form.people.vars.prototype.name)|e }}
+                        </li>
+                        <li>
+                            {{ form_widget(form.people.vars.prototype.position)|e }}
+                        </li>
+                    {% endfor %}
+                </ul>
+
+                {# <ul class="people"
+
+    data-index="{{ form.people|length > 0 ? form.people|last.vars.name + 1 : 0 }}"
+    data-index="{{ form.people|length > 0 ? form.people|last.vars.position + 1 : 0 }}"
+    data-prototype="{{ form_widget(form.people.vars.prototype)|e('html_attr') }}"
+
+></ul>
+        </div> #}
+                {{ form_end(form) }}
+
+
+
+            </div>
+        </div>
+    </div>

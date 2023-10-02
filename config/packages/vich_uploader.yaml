@@ -1,0 +1,12 @@
+# config/packages/vich_uploader.yaml or app/config/config.yml
+vich_uploader:
+    db_driver: orm
+
+    metadata:
+        type: attribute
+
+    mappings:
+        images_upload:
+            uri_prefix: /public/uploads
+            upload_destination: "C:/xampp/htdocs/nftMarketplace/uploads"
+            namer: Vich\UploaderBundle\Naming\OrignameNamer

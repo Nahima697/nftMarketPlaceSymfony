@@ -1,0 +1,32 @@
+.side-navbar {
+    width: 180px;
+    height: 100%;
+    position: fixed;
+    margin-left: -300px;
+    background-color: darkmagenta;
+    transition: 0.5s;
+    margin-right: 50px;
+}
+.nav-link:active,
+.nav-link:focus,
+.nav-link:hover {
+    background-color: #ffffff26;
+}
+
+a.menu{
+    text-decoration: none;
+}
+.my-container {
+    transition: 0.4s;
+}
+.active-nav {
+    margin-left: 0;
+}
+/* for main section */
+.active-cont {
+    margin-left: 180px;
+}
+#menu-btn {
+    background-color: blueviolet;
+    color: #fff;
+}

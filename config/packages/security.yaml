@@ -1,0 +1,81 @@
+# api/config/packages/security.yaml
+security:
+    # https://symfony.com/doc/current/security.html#c-hashing-passwords
+    password_hashers:
+        App\Entity\User: 'auto'
+
+
+    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+    providers:
+        # used to reload user from session & other features (e.g. switch_user)
+        users:
+            entity:
+                class: App\Entity\User
+                property: username
+
+    firewalls:
+        dev:
+            pattern: ^/_(profiler|wdt)
+            security: false
+        public:
+            methods: [ GET ]
+            pattern: ^/api/users
+            security: false
+        main:
+            pattern: ^/auth
+            stateless: false
+            provider: users
+            json_login:
+                check_path: auth
+                username_path: username
+                password_path: password
+                success_handler: lexik_jwt_authentication.handler.authentication_success
+                failure_handler: lexik_jwt_authentication.handler.authentication_failure
+            jwt: ~
+            custom_authenticator: App\Security\GoogleAuthenticator
+        admin:
+            provider: users
+            form_login:
+                login_path: app_login
+                check_path: app_login
+                enable_csrf: true
+                csrf_parameter: _csrf_token
+                default_target_path: app_admin
+            logout:
+                path: app_logout
+                target: app_login
+            custom_authenticator: App\Security\UserAuthenticator
+            entry_point: form_login
+            remember_me:
+                secret: '%kernel.secret%'
+                lifetime: 604800
+                path: /
+                always_remember_me: true
+
+    access_control:
+        - { path: ^/$, roles: PUBLIC_ACCESS } # Allows accessing the Swagger UI
+        - { path: ^/api/docs, roles: PUBLIC_ACCESS } # Allows accessing the Swagger UI docs
+        - { path: ^/auth, roles: PUBLIC_ACCESS }
+        - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/admin/login, roles: PUBLIC_ACCESS }
+        - { path: ^/api/nfts, method: GET, roles: PUBLIC_ACCESS }
+        - { path: ^/api/users, method: POST, roles: ROLE_USER }
+        - { path: ^/api/categories, method: GET, roles: PUBLIC_ACCESS }
+        - { path: ^/api/galleries, method: GET, roles: PUBLIC_ACCESS }
+        - { path: ^/api/galleries, methods: POST, roles: ROLE_USER }
+        - { path: ^/api/nfts, methods: POST, roles: ROLE_USER}
+        - { path: ^/api/users, methods: GET , roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
+
+when@test:
+    security:
+        password_hashers:
+            # By default, password hashers are resource intensive and take time. This is
+            # important to generate secure password hashes. In tests however, secure hashes
+            # are not important, waste resources and increase test times. The following
+            # reduces the work factor to the lowest possible values.
+            Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface:
+                algorithm: auto
+                cost: 4 # Lowest possible value for bcrypt
+                time_cost: 3 # Lowest possible value for argon
+                memory_cost: 10 # Lowest possible value for argon

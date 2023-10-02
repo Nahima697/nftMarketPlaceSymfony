@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nft{% endblock %}
+
+{% block body %}
+    <h1>Nft index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Image</th>
+                <th>Quantity</th>
+                <th>DropDate</th>
+                <th>Price</th>
+                <th>Description</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for nft in nfts %}
+            <tr>
+                <td>{{ nft.name }}</td>
+                <td>  <img class="img-fluid m-3 align-self-center" width="150" height="150" src="{{ 'http://localhost/nftMarketplace/uploads/' ~ nft.image }}" alt"affiche {{nft.name}}"></td>
+                <td>{{ nft.quantity }}</td>
+                <td>{{ nft.dropDate ? nft.dropDate|date('Y-m-d') : '' }}</td>
+                <td>{{ nft.price }}</td>
+                <td>{{ nft.description }}</td>
+                <td>
+                    <a href="{{ path('app_nft_show', {'id': nft.id}) }}" class="btn btn-primary">Voir</a>
+                    <a href="{{ path('app_nft_edit', {'id': nft.id}) }}" class="btn btn-warning">Mettre à jour</a>
+                    <a href="{{ path('app_nft_delete', {'id': nft.id}) }}" class="btn btn-danger">supprimer</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8">Rien ne correspond</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_nft_new') }}"class="btn btn-success">Creer un nouveau Nft</a>
+{% endblock %}
