@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Doctrine\Odm\Filter\DateFilter;
 use ApiPlatform\Doctrine\Odm\Filter\OrderFilter;
+use ApiPlatform\Doctrine\Orm\Filter\RangeFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiProperty;
@@ -28,13 +29,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: GalleryRepository::class)]
 #[ApiResource(
     normalizationContext: ['groups' => ['galleries:read']],
+    paginationClientItemsPerPage: true,
     denormalizationContext: ['groups' => ['galleries:post']],
     operations: [
-    new GetCollection(
-        uriTemplate: '/galleries/{id}/nfts',
-        controller: GetNftsFromGalleryController::class,
-        read:true
-    ),
         new GetCollection(),
         new Get(),
         new Put(),
@@ -52,9 +49,6 @@ class Gallery
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
-    #[Groups(['galleries:read'])]
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTimeInterface $purchase_date = null;
 
 
     #[ORM\ManyToOne(inversedBy: 'galleries', fetch:"EAGER")]
@@ -77,11 +71,6 @@ class Gallery
     #[ORM\Column(length: 255)]
     private ?string $description = null;
 
-    public function __construct()
-    {
-        $this->nfts = new ArrayCollection();
-        $this->purchase_date = new \DateTime();
-    }
 
     #[Groups(['galleries:read','read:nft','top-creator'])]
     public function getId(): ?int
@@ -89,37 +78,9 @@ class Gallery
         return $this->id;
     }
 
-
-    public function getPurchaseDate(): ?\DateTimeInterface
-    {
-        return $this->purchase_date;
-    }
-
-    public function setPurchaseDate(\DateTimeInterface $purchase_date): static
-    {
-        $this->purchase_date = $purchase_date;
-
-        return $this;
-    }
-
-    #[Groups(['galleries:read','read:nft','top-creator'])]
-    public function getOwnerName(): ?string
-    {
-        return $this->owner ? $this->owner->getUsername() : null;
-
-    }
-
-
     public function getOwnerId(): ?int
     {
         return $this->owner ? $this->owner->getId() : null;
-
-    }
-
-    #[Groups(['galleries:read','read:nft'])]
-    public function getAvatar(): ?string
-    {
-        return $this->owner ? $this->owner->getAvatar() : null;
 
     }
 

@@ -53,7 +53,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
-    #[Groups(['top-creator','read:nft'])]
+    #[Groups(['top-creator','read:nft','galleries:read'])]
     private ?string $username = null;
 
     #[ORM\Column]
@@ -156,7 +156,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->id;
     }
 
-    #[Groups(['read:nft'])]
+//    #[Groups(['read:nft'])]
     public function getUsername(): ?string
     {
         return $this->username;

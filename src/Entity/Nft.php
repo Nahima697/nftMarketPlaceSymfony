@@ -7,6 +7,7 @@ use ApiPlatform\Doctrine\Orm\Filter\RangeFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiProperty;
+use ApiPlatform\Metadata\Get;
 use Symfony\Component\HttpFoundation\File\File;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
@@ -36,22 +37,20 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
         new Post(validationContext: ['groups' => ['Default', 'postValidation']],
             denormalizationContext:[ 'groups'=>['write:nft']],
             inputFormats: ['multipart' => ['multipart/form-data']],controller: NftUploadController::class),
-        new GetCollection(paginationItemsPerPage: 3,  normalizationContext: ['groups' => ['read:trend-nft']]),
-        new GetCollection( normalizationContext: ['groups' => ['read:nft']]),
+        new GetCollection(normalizationContext: ['groups' => ['read:nft']],paginationClientItemsPerPage: true),
+        new GetCollection(),
         new Put(),
+        new Get(),
         new Delete(),
         new Patch()
     ]
 )
 ]
 
-#[ApiFilter(OrderFilter::class,properties: ['dropDate' =>'DESC'])]
-
-
 #[Vich\Uploadable]
 class Nft
 {
-    #[Groups(['read:nft','top-creator','read:trend-nft'])]
+    #[Groups(['read:nft','top-creator','galleries:read'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -84,6 +83,7 @@ class Nft
         'gallery.name'=>'partial',
         'gallery.owner.username'=>'partial'
     ])]
+
 
     #[ Vich\UploadableField(mapping: 'images_upload',fileNameProperty: "image")]
     #[Groups(['write:nft'])]
@@ -121,11 +121,13 @@ class Nft
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     #[Groups( ['read:nft','write:nft','read:trend-nft'])]
+    #[ApiFilter(OrderFilter::class,properties: ['dropDate' =>'DESC'])]
     private ?\DateTimeInterface $dropDate = null;
+
+
 
     #[ORM\Column]
     #[Groups( ['read:nft','write:nft'])]
-    #[ApiProperty(types: ['https://schema.org/price'])]
     #[ApiFilter(RangeFilter::class)]
     private ?float $price = null;
 
@@ -134,9 +136,14 @@ class Nft
     #[ORM\ManyToOne(inversedBy: 'nfts')]
     private ?Gallery $gallery = null;
 
-    #[Groups( ['read:nft','write:nft','read:trend-nft'])]
+    #[Groups( ['read:nft','write:nft'])]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
+
+    #[Groups( ['read:nft'])]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[ApiFilter(OrderFilter::class)]
+    private ?\DateTimeInterface $saleDate = null;
 
     public function getId(): ?int
     {
@@ -236,17 +243,17 @@ class Nft
     {
         return $this->gallery;
     }
-    #[Groups(['read:nft','read:trend-nft'])]
-    public function getGalleryName(): ?string
-    {
-        return $this->gallery ? $this->gallery->getName() : null;
-    }
+//    #[Groups(['read:nft','read:trend-nft'])]
+//    public function getGalleryName(): ?string
+//    {
+//        return $this->gallery ? $this->gallery->getName() : null;
+//    }   #[Groups(['read:nft','read:trend-nft'])]
+//    public function getOwnerName(): ?string
+//    {
+//        return $this->gallery ? $this->gallery->getOwnerName() : null;
+//    }
 
-    #[Groups(['read:nft','read:trend-nft'])]
-    public function getOwnerName(): ?string
-    {
-        return $this->gallery ? $this->gallery->getOwnerName() : null;
-    }
+//
 
     public function setGallery(?Gallery $gallery): static
     {
@@ -263,6 +270,18 @@ class Nft
     public function setDescription(?string $description): static
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    public function getSaleDate(): ?\DateTimeInterface
+    {
+        return $this->saleDate;
+    }
+
+    public function setSaleDate(?\DateTimeInterface $saleDate): static
+    {
+        $this->saleDate = $saleDate;
 
         return $this;
     }
