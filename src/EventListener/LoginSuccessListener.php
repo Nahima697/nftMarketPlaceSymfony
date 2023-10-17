@@ -18,9 +18,9 @@ class LoginSuccessListener
         }
 
         $data['user'] = array(
-            'roles' => $user->getRoles(),
-            'id' =>$user->getId(),
-        );
+        'roles' => $user->getRoles(),
+        'id' =>$user->getId(),
+    );
 
         $event->setData($data);
     }

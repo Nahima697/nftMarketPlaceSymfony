@@ -11,7 +11,7 @@ final class UploadedFileDenormalizer implements DenormalizerInterface
 */
 public function denormalize($data, string $type, string $format = null, array $context = []): UploadedFile
 {
-    dd('ici');
+
 return $data;
 }
 

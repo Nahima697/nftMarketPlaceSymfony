@@ -69,7 +69,7 @@ class NftController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_nft_delete', methods: ['POST'])]
+    #[Route('/{id}', name: 'app_nft_delete', methods: ['DELETE'])]
     public function delete(Request $request, Nft $nft, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$nft->getId(), $request->request->get('_token'))) {

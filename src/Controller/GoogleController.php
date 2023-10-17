@@ -6,6 +6,8 @@ namespace App\Controller;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use KnpU\OAuth2ClientBundle\Security\Exception\IdentityProviderAuthenticationException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -37,7 +39,14 @@ class GoogleController extends AbstractController
 
             // do something with all this new power!
             // e.g. $name = $user->getFirstName();
-            var_dump($user); die;
+
+//            return new RedirectResponse($angularUrl);
+            return new JsonResponse([
+//                'access_token' => $client->getAccessToken(),
+                'id'=>$user->getId(),
+                'avatar'=>$user->getAvatar(),
+                'firstName'=>$user->getFirstName(),
+            ]);
             // ...
         } catch (IdentityProviderAuthenticationException $e) {
             // something went wrong!

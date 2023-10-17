@@ -23,7 +23,7 @@ security:
             security: false
         main:
             pattern: ^/auth
-            stateless: false
+            stateless: true
             provider: users
             json_login:
                 check_path: auth
@@ -33,7 +33,9 @@ security:
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
             jwt: ~
             custom_authenticator: App\Security\GoogleAuthenticator
+
         admin:
+            pattern: ^/admin
             provider: users
             form_login:
                 login_path: app_login
@@ -64,6 +66,7 @@ security:
         - { path: ^/api/galleries, method: GET, roles: PUBLIC_ACCESS }
         - { path: ^/api/galleries, methods: POST, roles: ROLE_USER }
         - { path: ^/api/nfts, methods: POST, roles: ROLE_USER}
+        - { path: ^/api/nfts, methods: DELETE, roles: PUBLIC_ACCESS }
         - { path: ^/api/users, methods: GET , roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
 
