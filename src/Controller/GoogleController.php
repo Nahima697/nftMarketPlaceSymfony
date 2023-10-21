@@ -40,7 +40,6 @@ class GoogleController extends AbstractController
             // do something with all this new power!
             // e.g. $name = $user->getFirstName();
 
-//            return new RedirectResponse($angularUrl);
             return new JsonResponse([
 //                'access_token' => $client->getAccessToken(),
                 'id'=>$user->getId(),

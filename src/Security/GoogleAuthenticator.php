@@ -9,6 +9,7 @@ use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use KnpU\OAuth2ClientBundle\Security\Authenticator\OAuth2Authenticator;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\RouterInterface;
@@ -67,7 +68,7 @@ class GoogleAuthenticator extends OAuth2Authenticator
                     $existingUser->setUsername($googleUser->getFirstName());
                     $existingUser->setFirstName($googleUser->getFirstName());
                     $existingUser->setLastName($googleUser->getLastName());
-                    $existingUser->setRoles('ROLE_USER');
+                    $existingUser->setRoles(['ROLE_USER']);
                     $existingUser->setPassword('');
                     $this->entityManager->persist($existingUser);
                 }
@@ -85,15 +86,17 @@ class GoogleAuthenticator extends OAuth2Authenticator
         $jwtToken = $this->jwtManager->create($user);
 
         $googleId = $user->getGoogleId();
+        $userId = $user->getId();
 
-        $response = new JsonResponse([
+        $data = [
             'token' => $jwtToken,
             'googleId' => $googleId,
-        ]);
+            'id' => $userId
+        ];
 
-        return $response;
-
+        return new JsonResponse($data);
     }
+
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
     {

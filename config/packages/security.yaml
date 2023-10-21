@@ -32,10 +32,13 @@ security:
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
             jwt: ~
-            custom_authenticator: App\Security\GoogleAuthenticator
-
+        google_auth:
+            pattern: ^/connect/google
+            stateless: false
+            custom_authenticators:
+                    - App\Security\GoogleAuthenticator
         admin:
-            pattern: ^/admin
+            pattern: ^/
             provider: users
             form_login:
                 login_path: app_login

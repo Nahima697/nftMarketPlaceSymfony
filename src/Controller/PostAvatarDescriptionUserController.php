@@ -21,7 +21,6 @@ class PostAvatarDescriptionUserController
 
     public function __construct(
         EntityManagerInterface $entityManager,
-        private SerializerInterface $serializer
     ) {
         $this->entityManager = $entityManager;
     }

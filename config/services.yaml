@@ -34,6 +34,8 @@ services:
         autowire: true
     App\Controller\PostAvatarDescriptionUserController:
         autowire: true
+    App\Controller\UserGoogleController:
+        autowire: true
 
     services:
             class: App\EventListener\LoginSuccessListener

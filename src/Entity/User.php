@@ -2,14 +2,22 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Api\UriVariablesConverter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Link;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use App\Controller\GetNftsFromUsersController;
 use App\Controller\PostAvatarDescriptionUserController;
+use App\Controller\UserController;
+use App\Controller\UserGoogleController;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -18,14 +26,14 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[ApiResource(normalizationContext: ['groups' => ['top-creator']],paginationItemsPerPage: 12)]
+
 //#[ApiFilter(OrderFilter::class, properties: ['totalSales'=>'DESC'])]
+#[ApiResource(normalizationContext: ['groups' => ['top-creator']],paginationItemsPerPage: 12)]
 #[ApiResource(
     operations: [
         new GetCollection(
@@ -35,12 +43,19 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
             ),
             new Post(validationContext: ['groups' => ['Default', 'postValidation']],
                 denormalizationContext:[ 'groups'=>['write:creator']],
-                uriTemplate:'users/{id}/avatar/description',controller:PostAvatarDescriptionUserController::class,
+                uriTemplate:'/users/{id}/avatar/description',controller:PostAvatarDescriptionUserController::class,
                 inputFormats: ['multipart' => ['multipart/form-data']],
-
-            )])]
-
-
+            ),
+            new Get(uriTemplate: '/users/google/{googleId}', uriVariables: 'googleId', controller: UserGoogleController::class,
+                ),
+        new Get(normalizationContext: ['groups' => ['top-creator']],paginationItemsPerPage: 12),
+        new GetCollection(normalizationContext: ['groups' => ['top-creator']],paginationItemsPerPage: 12),
+        new Post(),
+        new Delete(),
+        new Put(),
+        new Patch(),
+    ])
+]
 
 #[Vich\Uploadable]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
@@ -50,6 +65,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
@@ -135,8 +151,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['write:creator','top-creator','read:nft'])]
     private ?string $description = null;
 
-
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255,nullable:true)]
     private ?string $googleId = null;
 
     #[ORM\Column(length: 255)]
@@ -147,14 +162,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->wallets = new ArrayCollection();
         $this->galleries = new ArrayCollection();
     }
-
     /**
-     * @return DateTime|null
+     * @return int|null
      */
     public function getId(): ?int
     {
         return $this->id;
     }
+
 
 //    #[Groups(['read:nft'])]
     public function getUsername(): ?string
