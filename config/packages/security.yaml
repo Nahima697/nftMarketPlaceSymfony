@@ -3,7 +3,8 @@ security:
     # https://symfony.com/doc/current/security.html#c-hashing-passwords
     password_hashers:
         App\Entity\User: 'auto'
-
+    role_hierarchy:
+        ROLE_USER: ROLE_USER
 
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:

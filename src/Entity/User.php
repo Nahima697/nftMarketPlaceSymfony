@@ -29,31 +29,46 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 
+//#[ApiResource(
+//    operations: [
+//        new GetCollection(
+//            uriTemplate: '/users/{id}/nfts',
+//            controller: GetNftsFromUsersController::class,
+//            read: true,
+//            ),
+//            new Post(uriTemplate: '/users/{id}/avatar/description',
+//                inputFormats: ['multipart' => ['multipart/form-data']],
+//                controller: PostAvatarDescriptionUserController::class, denormalizationContext: [ 'groups'=>['write:creator']],
+//                validationContext: ['groups' => ['Default', 'postValidation']]
+//            ),
+//            new Get(uriTemplate: '/users/google/{googleId}', uriVariables: 'googleId', controller: UserGoogleController::class,
+//                ),
+//        new Get(normalizationContext: ['groups' => ['top-creator']]),
+//        new GetCollection(),
+//        new Post(denormalizationContext: ['groups' => ['user:create', 'user:update']], validationContext: ['groups' => ['Default', 'user:create']],processor:UserPasswordHasher::class),
+//        new Put(processor: UserPasswordHasher::class),
+//        new Patch(processor: UserPasswordHasher::class),
+//        new Delete(),
+//    ],
+//    normalizationContext: ['groups' => ['top-creator']],
+//    denormalizationContext: ['groups' => ['user:create', 'user:update']],
+//    paginationItemsPerPage: 12)]
+
+#[ApiResource(normalizationContext: ['groups' => ['top-creator','user:create','user:update']],paginationItemsPerPage: 12)]
 #[ApiResource(
     operations: [
         new GetCollection(
             uriTemplate: '/users/{id}/nfts',
             controller: GetNftsFromUsersController::class,
             read: true,
-            ),
-            new Post(uriTemplate: '/users/{id}/avatar/description',
-                inputFormats: ['multipart' => ['multipart/form-data']],
-                controller: PostAvatarDescriptionUserController::class, denormalizationContext: [ 'groups'=>['write:creator']],
-                validationContext: ['groups' => ['Default', 'postValidation']]
-            ),
-            new Get(uriTemplate: '/users/google/{googleId}', uriVariables: 'googleId', controller: UserGoogleController::class,
-                ),
-        new Get(),
-        new GetCollection(),
-        new Post(denormalizationContext: ['groups' => ['user:create', 'user:update']], validationContext: ['groups' => ['Default', 'user:create']]),
-        new Put(processor: UserPasswordHasher::class),
-        new Patch(processor: UserPasswordHasher::class),
-        new Delete(),
-    ],
-    normalizationContext: ['groups' => ['top-creator']],
-    denormalizationContext: ['groups' => ['user:create', 'user:update']],
-    paginationItemsPerPage: 12)
-]
+        ),
+        new Post(uriTemplate: 'users/{id}/avatar/description',
+            inputFormats: ['multipart' => ['multipart/form-data']],
+            controller: PostAvatarDescriptionUserController::class, denormalizationContext: [ 'groups'=>['write:creator']],
+            validationContext: ['groups' => ['Default', 'postValidation']],
+        ),
+        new Post(denormalizationContext: ['groups' => ['user:create', 'user:update']], validationContext: ['groups' => ['Default', 'user:create']])])]
+
 
 #[Vich\Uploadable]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
@@ -63,7 +78,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
@@ -72,6 +86,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $username = null;
 
     #[ORM\Column]
+    #[Groups(['user:create'])]
     private array $roles = [];
 
     /**
