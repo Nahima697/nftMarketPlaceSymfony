@@ -2,15 +2,11 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Api\UriVariablesConverter;
-use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
-use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
-use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
@@ -43,13 +39,13 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
             new Post(uriTemplate: '/users/{id}/avatar/description',
                 inputFormats: ['multipart' => ['multipart/form-data']],
                 controller: PostAvatarDescriptionUserController::class, denormalizationContext: [ 'groups'=>['write:creator']],
-                validationContext: ['groups' => ['Default', 'postValidation']],
+                validationContext: ['groups' => ['Default', 'postValidation']]
             ),
             new Get(uriTemplate: '/users/google/{googleId}', uriVariables: 'googleId', controller: UserGoogleController::class,
                 ),
         new Get(),
         new GetCollection(),
-        new Post(validationContext: ['groups' => ['Default', 'user:create']], processor: UserPasswordHasher::class),
+        new Post(denormalizationContext: ['groups' => ['user:create', 'user:update']], validationContext: ['groups' => ['Default', 'user:create']]),
         new Put(processor: UserPasswordHasher::class),
         new Patch(processor: UserPasswordHasher::class),
         new Delete(),
@@ -60,7 +56,6 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 ]
 
 #[Vich\Uploadable]
-#[UniqueEntity('username')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
 
@@ -76,7 +71,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\NotBlank(message:"Veuillez saisir un identifiant")]
     private ?string $username = null;
 
-    #[ORM\Column(type: 'json')]
+    #[ORM\Column]
     private array $roles = [];
 
     /**
