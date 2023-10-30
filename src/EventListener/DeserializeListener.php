@@ -44,14 +44,7 @@ class DeserializeListener
             return;
         }
         $context = $this->serializerContextBuilder->createFromRequest($request, false, $attributes);
-//        $context = [
-//            'groups' => ['read:nft', 'write:nft', 'integerValue'],
-//            'attributes' => [
-//                'resource_class' => Nft::class,
-//                'input' => 'App\Entity\Nft',
-//            ],
-//            AbstractObjectNormalizer::DISABLE_TYPE_ENFORCEMENT => true,
-//        ];
+
         $populated = $request->attributes->get('data');
         if ($populated !== null) {
             $context['object_to_populate'] = $populated;

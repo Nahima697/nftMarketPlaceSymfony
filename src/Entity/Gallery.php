@@ -68,7 +68,7 @@ class Gallery
     #[ORM\OneToMany(mappedBy: 'gallery', targetEntity: Nft::class)]
     private Collection $nfts;
     #[Groups(['galleries:read'])]
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255,nullable:true)]
     private ?string $description = null;
 
 

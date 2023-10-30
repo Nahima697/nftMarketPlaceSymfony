@@ -26,24 +26,23 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: NftRepository::class)]
 #[ApiResource(
-    normalizationContext: ['groups' => ['read:nft']],
     types: ['https://schema.org/images'],
     operations: [
         new GetCollection(
+            uriTemplate: '/nfts/{id}/user',
             controller: GetUserFromNftsController::class,
-            uriTemplate:'/nfts/{id}/user',
             read: true,
         ),
-        new Post(validationContext: ['groups' => ['Default', 'postValidation']],
-            denormalizationContext:[ 'groups'=>['write:nft']],
-            inputFormats: ['multipart' => ['multipart/form-data']],controller: NftUploadController::class),
-        new GetCollection(normalizationContext: ['groups' => ['read:nft']],paginationClientItemsPerPage: true),
-        new GetCollection(),
+        new Post(inputFormats: ['multipart' => ['multipart/form-data']],
+            controller: NftUploadController::class,
+            denormalizationContext: [ 'groups'=>['write:nft']], validationContext: ['groups' => ['Default', 'postValidation']]),
+        new GetCollection(paginationClientItemsPerPage: true, normalizationContext: ['groups' => ['read:nft']]),
         new Put(),
         new Get(),
         new Delete(),
         new Patch()
-    ]
+    ],
+    normalizationContext: ['groups' => ['read:nft']]
 )
 ]
 
@@ -123,8 +122,6 @@ class Nft
     #[Groups( ['read:nft','write:nft','read:trend-nft'])]
     #[ApiFilter(OrderFilter::class,properties: ['dropDate' =>'DESC'])]
     private ?\DateTimeInterface $dropDate = null;
-
-
 
     #[ORM\Column]
     #[Groups( ['read:nft','write:nft'])]

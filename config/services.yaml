@@ -7,10 +7,7 @@ parameters:
 
     _defaults:
         # ...
-
 services:
-    App\Controller\GetNftsFromGallery:
-        autowire: true
     App\Encoder\MultipartDecoder: # Assurez-vous que cette ligne est décommentée
         autowire: true
         tags: [ 'serializer.encoder' ]
@@ -18,10 +15,9 @@ services:
         autowire: true
         tags:
             - { name: kernel.serializer.normalizer, method: denormalize }
-    App\Serializer\Normalizer\NftNormalizer: # Assurez-vous que cette ligne est décommentée
-        class: App\Serializer\Normalizer\NftNormalizer # Spécifiez la classe associée
-        autowire: true
-        tags: [ 'serializer.normalizer' ]
+    App\State\UserPasswordHasher:
+        bind:
+            $processor: '@api_platform.doctrine.orm.state.persist_processor'
     App\EventListener\DeserializeListener:
         tags:
             - { name: 'kernel.event_listener', event: 'kernel.request', method: 'onKernelRequest', priority: 2 }
@@ -42,8 +38,6 @@ services:
             tags:
                 - { name: kernel.event_listener, event: lexik_jwt_authentication.on_authentication_success, method: onAuthenticationSuccessResponse }
 
-#                   App\Serializer\UploadedFileDenormalizer
-#                - { name: kernel.serializer.normalizer, method: denormalize }
 
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.

@@ -43,7 +43,6 @@ class PostAvatarDescriptionUserController
         $description = $request->request->get('description');
         $imageFile = $request->files->get('avatar');
 
-
         $user->setDescription($description);
 
         if ($imageFile) {
