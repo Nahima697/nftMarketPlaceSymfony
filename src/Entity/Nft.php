@@ -35,9 +35,9 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
         ),
         new Post(inputFormats: ['multipart' => ['multipart/form-data']],
             controller: NftUploadController::class,
-            denormalizationContext: [ 'groups'=>['write:nft']], validationContext: ['groups' => ['Default', 'postValidation']]),
+            denormalizationContext: [ 'groups'=>['write:nft']], security: "is_granted('ROLE_USER')", securityPostDenormalize: "is_granted('ROLE_ADMIN') or (object.owner == user )", validationContext: ['groups' => ['Default', 'postValidation']]),
         new GetCollection(paginationClientItemsPerPage: true, normalizationContext: ['groups' => ['read:nft']]),
-        new Put(),
+        new Put(securityPostDenormalize: "is_granted('ROLE_ADMIN') or (object.owner == user and previous_object.owner == user)"),
         new Get(),
         new Delete(),
         new Patch()
@@ -69,11 +69,11 @@ class Nft
     private ?string $image = null;
 
     #[Assert\Image(
-        groups: ['postValidation'],
-        mimeTypes:['image/jpg','image/jpeg','image/webp','image/png'],
+        maxSize: "5M",
+        mimeTypes: ['image/jpg','image/jpeg','image/webp','image/png'],
+        maxSizeMessage: "Le fichier est trop volumineux. La taille maximale autorisée est {{ maxSize }}.",
         mimeTypesMessage: "Merci de mettre une image au format jpg, jpeg, png ou webp",
-        maxSize:"5M",
-        maxSizeMessage: "Le fichier est trop volumineux. La taille maximale autorisée est {{ maxSize }}."
+        groups: ['postValidation']
     )]
 
     #[ApiFilter(SearchFilter::class, properties: [
