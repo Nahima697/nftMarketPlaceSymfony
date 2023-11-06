@@ -37,12 +37,15 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
             controller: GetNftsFromUsersController::class,
             read: true,
         ),
+        new Get(uriTemplate: 'users/google/{googleId}', uriVariables: 'googleId', controller: UserGoogleController::class,
+        ),
         new Post(uriTemplate: 'users/{id}/avatar/description',
             inputFormats: ['multipart' => ['multipart/form-data']],
             controller: PostAvatarDescriptionUserController::class, denormalizationContext: [ 'groups'=>['write:creator']],
             validationContext: ['groups' => ['Default', 'postValidation']],
         ),
-        new Post(denormalizationContext: ['groups' => ['user:create', 'user:update']], validationContext: ['groups' => ['Default', 'user:create']])])]
+        new Post(denormalizationContext: ['groups' => ['user:create']], validationContext: ['groups' => ['Default', 'user:create']]),
+        new Put(denormalizationContext: ['groups' => ['user:update']])])]
 
 
 #[Vich\Uploadable]

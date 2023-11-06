@@ -28,6 +28,7 @@ security:
             provider: users
             jwt: ~
         main:
+            pattern: ^/auth
             json_login:
                 check_path: auth
                 username_path: username

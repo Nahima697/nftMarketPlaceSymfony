@@ -35,7 +35,9 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
         ),
         new Post(inputFormats: ['multipart' => ['multipart/form-data']],
             controller: NftUploadController::class,
-            denormalizationContext: [ 'groups'=>['write:nft']], security: "is_granted('ROLE_USER')", securityPostDenormalize: "is_granted('ROLE_ADMIN') or (object.owner == user )", validationContext: ['groups' => ['Default', 'postValidation']]),
+            denormalizationContext: [ 'groups'=>['write:nft']], security: "is_granted('ROLE_USER')",
+            securityPostDenormalize: "is_granted('ROLE_ADMIN') or (object.owner == user )",
+            validationContext: ['groups' => ['Default', 'postValidation']]),
         new GetCollection(paginationClientItemsPerPage: true, normalizationContext: ['groups' => ['read:nft']]),
         new Put(securityPostDenormalize: "is_granted('ROLE_ADMIN') or (object.owner == user and previous_object.owner == user)"),
         new Get(),
@@ -119,12 +121,12 @@ class Nft
     private ?int $quantity = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    #[Groups( ['read:nft','write:nft','read:trend-nft'])]
+    #[Groups( ['read:nft','write:nft','read:trend-nft','top:creator'])]
     #[ApiFilter(OrderFilter::class,properties: ['dropDate' =>'DESC'])]
     private ?\DateTimeInterface $dropDate = null;
 
     #[ORM\Column]
-    #[Groups( ['read:nft','write:nft'])]
+    #[Groups( ['galleries:read','categories:read','read:nft','read:trend-nft','top-creator','write:nft'])]
     #[ApiFilter(RangeFilter::class)]
     private ?float $price = null;
 
