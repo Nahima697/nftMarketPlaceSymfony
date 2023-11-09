@@ -32,9 +32,9 @@ services:
         autowire: true
 
     services:
-            class: App\EventListener\LoginSuccessListener
-            tags:
-                - { name: kernel.event_listener, event: lexik_jwt_authentication.on_authentication_success, method: onAuthenticationSuccessResponse }
+        class: App\EventListener\LoginSuccessListener
+        tags:
+            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_authentication_success, method: onAuthenticationSuccessResponse }
 
 
     _defaults:
