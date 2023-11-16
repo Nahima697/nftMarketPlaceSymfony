@@ -8,5 +8,5 @@ vich_uploader:
     mappings:
         images_upload:
             uri_prefix: /public/uploads
-            upload_destination: "C:/xampp/htdocs/nftMarketplace/uploads"
+            upload_destination: "%kernel.project_dir%/public/uploads"
             namer: Vich\UploaderBundle\Naming\OrignameNamer
