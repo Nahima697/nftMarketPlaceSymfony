@@ -7,6 +7,7 @@ use League\OAuth2\Client\Provider\GoogleUser;
 use Doctrine\ORM\EntityManagerInterface;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use KnpU\OAuth2ClientBundle\Security\Authenticator\OAuth2Authenticator;
+use Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;

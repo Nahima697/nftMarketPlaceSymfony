@@ -28,16 +28,16 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: GalleryRepository::class)]
 #[ApiResource(
-    normalizationContext: ['groups' => ['galleries:read']],
-    paginationClientItemsPerPage: true,
-    denormalizationContext: ['groups' => ['galleries:post']],
     operations: [
         new GetCollection(),
         new Get(),
         new Put(),
         new Delete(),
         new Patch()
-        ]
+        ],
+    normalizationContext: ['groups' => ['galleries:read']],
+    denormalizationContext: ['groups' => ['galleries:post']],
+    paginationClientItemsPerPage: true
     )
 , ApiFilter(OrderFilter::class, properties: ['purchase_date'=>'DESC'])]
 #[Post(validationContext: ['groups' => ['Default', 'postValidation']])]
@@ -51,7 +51,7 @@ class Gallery
     private ?int $id = null;
 
 
-    #[ORM\ManyToOne(inversedBy: 'galleries', fetch:"EAGER")]
+    #[ORM\ManyToOne(fetch: "EAGER", inversedBy: 'galleries')]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['galleries:read','read:nft','galleries:post'])]
     private ?User $owner = null;

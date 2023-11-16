@@ -17,16 +17,16 @@ class UserPasswordHasher implements ProcessorInterface
 
     public function process($data, Operation $operation, array $uriVariables = [], array $context = [])
     {
-        if (!$data->getPlainPassword()) {
-            return $this->processor->process($data, $operation, $uriVariables, $context);
+        // Vérifier si l'entité est de type User avant de traiter le mot de passe
+        if ($data instanceof \App\Entity\User && $data->getPlainPassword()) {
+            $hashedPassword = $this->passwordHasher->hashPassword(
+                $data,
+                $data->getPlainPassword()
+            );
+            $data->setPassword($hashedPassword);
+            $data->eraseCredentials();
         }
 
-        $hashedPassword = $this->passwordHasher->hashPassword(
-            $data,
-            $data->getPlainPassword()
-        );
-        $data->setPassword($hashedPassword);
-        $data->eraseCredentials();
 
         return $this->processor->process($data, $operation, $uriVariables, $context);
     }

@@ -29,9 +29,9 @@ class NftUploadController
         $this->galleryRepository = $galleryRepository;
     }
 
-    #[Route('/api/nfts', name: 'create_nft', methods: ['POST'],defaults: [
+    #[Route('/api/nfts', name: 'create_nft', defaults: [
         '_api_resource_class' => Nft::class,
-    ])]
+    ], methods: ['POST'])]
     public function __invoke(Request $request): JsonResponse
     {
         $data = $request->request->get('data');
