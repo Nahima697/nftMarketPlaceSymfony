@@ -23,6 +23,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 
 #[ORM\Entity(repositoryClass: NftRepository::class)]
 #[ApiResource(
@@ -82,7 +83,6 @@ class Nft
         'gallery.name'=>'partial',
         'gallery.owner.username'=>'partial'
     ])]
-
 
     #[ Vich\UploadableField(mapping: 'images_upload',fileNameProperty: "image")]
     #[Groups(['write:nft'])]
@@ -240,17 +240,7 @@ class Nft
     {
         return $this->gallery;
     }
-//    #[Groups(['read:nft','read:trend-nft'])]
-//    public function getGalleryName(): ?string
-//    {
-//        return $this->gallery ? $this->gallery->getName() : null;
-//    }   #[Groups(['read:nft','read:trend-nft'])]
-//    public function getOwnerName(): ?string
-//    {
-//        return $this->gallery ? $this->gallery->getOwnerName() : null;
-//    }
 
-//
 
     public function setGallery(?Gallery $gallery): static
     {

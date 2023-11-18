@@ -1,0 +1,15 @@
+liip_imagine:
+    driver: "gd"
+    resolvers:
+        webp_conversion:
+            web_path:
+                web_root: "%kernel.project_dir%/public/uploads"
+                cache_prefix: "media/cache"
+    webp:
+        generate: true
+    filter_sets:
+        cache: ~
+        webp_conversion:
+            format: webp
+            quality: 80
+

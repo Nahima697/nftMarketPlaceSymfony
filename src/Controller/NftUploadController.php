@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 
 #[AsController]
@@ -75,4 +76,14 @@ class NftUploadController
 
         return new JsonResponse(['message' => 'NFT created successfully'], JsonResponse::HTTP_CREATED);
     }
+
+
+    private function imageWebp(string $sourcePath, string $destinationPath): void
+    {
+        $image = imagecreatefromstring(file_get_contents($sourcePath));
+        imagewebp($image, $destinationPath);
+        imagedestroy($image);
+    }
+
+
 }

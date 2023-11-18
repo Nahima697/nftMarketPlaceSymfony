@@ -6,6 +6,7 @@
     "require": {
         "php": ">=8.1",
         "ext-ctype": "*",
+        "ext-gd": "*",
         "ext-iconv": "*",
         "api-platform/core": "^3.1",
         "doctrine/doctrine-bundle": "^2.10",
@@ -15,6 +16,7 @@
         "knpuniversity/oauth2-client-bundle": "^2.15",
         "league/oauth2-google": "^4.0",
         "lexik/jwt-authentication-bundle": "^2.19",
+        "liip/imagine-bundle": "^2.12",
         "nelmio/cors-bundle": "^2.3",
         "nelmio/security-bundle": "^3.0",
         "phpdocumentor/reflection-docblock": "^5.3",
