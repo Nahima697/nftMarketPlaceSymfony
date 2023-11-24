@@ -31,3 +31,7 @@ when@test:
     router:
         # ...
         resource: '%kernel.project_dir%/config/routes.yaml'
+    http_cache:
+        etag: true
+        last_modified: true
+        max_age: 31536000

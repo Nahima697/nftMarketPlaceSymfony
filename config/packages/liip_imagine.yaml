@@ -1,15 +1,20 @@
 liip_imagine:
+
     driver: "gd"
-    resolvers:
-        webp_conversion:
-            web_path:
-                web_root: "%kernel.project_dir%/public/uploads"
-                cache_prefix: "media/cache"
     webp:
         generate: true
+    default_filter_set_settings:
+        format: webp
+    resolvers:
+        default:
+            web_path: ~
+    controller:
+        redirect_response_code: 302
     filter_sets:
-        cache: ~
-        webp_conversion:
+        thumbnail_web_path:
             format: webp
-            quality: 80
-
+            quality: 100
+            filters:
+                thumbnail:
+                    size: [330, 223]
+                    mode: outbound
