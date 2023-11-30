@@ -65,7 +65,7 @@ security:
         - { path: ^/api/docs, roles: PUBLIC_ACCESS } # Allows accessing the Swagger UI docs
         - { path: ^/auth, roles: PUBLIC_ACCESS }
         - { path: ^/admin, roles: ROLE_ADMIN }
-        - { path: ^/admin/login, roles: PUBLIC_ACCESS }
+        - { path: ^/login, roles: PUBLIC_ACCESS }
         - { path: ^/api/nfts, method: GET, roles: PUBLIC_ACCESS }
         - { path: ^/api/categories, method: GET, roles: PUBLIC_ACCESS }
         - { path: ^/api/galleries, method: GET, roles: PUBLIC_ACCESS }

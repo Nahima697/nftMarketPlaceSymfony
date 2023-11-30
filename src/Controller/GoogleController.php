@@ -26,7 +26,7 @@ class GoogleController extends AbstractController
     public function connectAction(ClientRegistry $clientRegistry)
     {
         //Redirect to google
-        return $clientRegistry->getClient('google')->redirect([], []);
+        return $clientRegistry->getClient('google')->redirect(['https://streetnft-market-place-angular.vercel.app/user/connectedUser'], []);
     }
 
     /**

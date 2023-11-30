@@ -23,7 +23,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
-use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 
 #[ORM\Entity(repositoryClass: NftRepository::class)]
 #[ApiResource(
@@ -108,7 +107,6 @@ class Nft
      * @return File|null
      */
 
-
     #[ORM\ManyToOne(inversedBy: 'nfts')]
     #[Groups( ['galleries:read','write:nft'])]
     private ?Category $category = null;
@@ -181,7 +179,6 @@ class Nft
     }
 
 
-
     #[Groups(['read:nft','read:trend-nft'])]
     public function getCategoryName(): ?string
     {
@@ -220,7 +217,6 @@ class Nft
         return $this;
     }
 
-
     public function getPrice(): ?float
     {
         return $this->price;
@@ -238,19 +234,16 @@ class Nft
         return $this->gallery;
     }
 
-
     public function setGallery(?Gallery $gallery): static
     {
         $this->gallery = $gallery;
 
         return $this;
     }
-
     public function getDescription(): ?string
     {
         return $this->description;
     }
-
     public function setDescription(?string $description): static
     {
         $this->description = $description;
