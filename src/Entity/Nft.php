@@ -62,7 +62,7 @@ class Nft
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(groups: ['postValidation'])]
+    #[Assert\NotBlank(message:"Veuillez renseignez un nom")]
 
     #[ApiProperty(types: ['https://schema.org/image'])]
     #[Groups( ['galleries:read','categories:read','read:nft','top-creator','read:trend-nft'])]
@@ -73,7 +73,6 @@ class Nft
         mimeTypes: ['image/jpg','image/jpeg','image/webp','image/png'],
         maxSizeMessage: "Le fichier est trop volumineux. La taille maximale autorisée est {{ maxSize }}.",
         mimeTypesMessage: "Merci de mettre une image au format jpg, jpeg, png ou webp",
-        groups: ['postValidation']
     )]
 
     #[ApiFilter(SearchFilter::class, properties: [
@@ -109,6 +108,7 @@ class Nft
 
     #[ORM\ManyToOne(inversedBy: 'nfts')]
     #[Groups( ['galleries:read','write:nft'])]
+    #[Assert\Choice(callback: 'getCategory')]
     private ?Category $category = null;
 
     #[ORM\Column]
@@ -119,15 +119,17 @@ class Nft
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     #[Groups( ['read:nft','write:nft','read:trend-nft','top:creator'])]
     #[ApiFilter(OrderFilter::class,properties: ['dropDate' =>'DESC'])]
+    #[Assert\Type(type: 'date', message: 'La date doit être au format date')]
     private ?\DateTimeInterface $dropDate = null;
 
     #[ORM\Column]
     #[Groups( ['galleries:read','categories:read','read:nft','read:trend-nft','top-creator','write:nft'])]
     #[ApiFilter(RangeFilter::class)]
+    #[Assert\Type(type: 'float', message: 'Le prix doit être un nombre.')]
     private ?float $price = null;
 
     #[Groups( ['categories:read','top-creator','write:nft','read:nft'])]
-    #[Assert\Valid]
+    #[Assert\Choice(callback: 'getGallery')]
     #[ORM\ManyToOne(inversedBy: 'nfts')]
     private ?Gallery $gallery = null;
 

@@ -26,7 +26,7 @@ class GoogleController extends AbstractController
     public function connectAction(ClientRegistry $clientRegistry)
     {
         //Redirect to google
-        return $clientRegistry->getClient('google')->redirect(['https://streetnft-market-place-angular.vercel.app/user/connectedUser'], []);
+        return $clientRegistry->getClient('google')->redirect([], []);
     }
 
     /**
@@ -45,10 +45,6 @@ class GoogleController extends AbstractController
             /** @var \League\OAuth2\Client\Provider\GoogleUser $user */
             $user = $client->fetchUser();
 
-            $angularRedirectUrl = 'https://streetnft-market-place-angular.vercel.app/user/connectedUser';
-
-            // Redirect directly to the Angular URL
-            return new RedirectResponse($angularRedirectUrl);
 
 //            return new JsonResponse([
 ////                'access_token' => $client->getAccessToken(),

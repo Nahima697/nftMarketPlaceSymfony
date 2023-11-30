@@ -3,6 +3,7 @@
 namespace App\Security;
 
 use App\Entity\User;
+use http\Cookie;
 use League\OAuth2\Client\Provider\GoogleUser;
 use Doctrine\ORM\EntityManagerInterface;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
@@ -22,6 +23,7 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
 
 
+
 class GoogleAuthenticator extends OAuth2Authenticator
 {
     private ClientRegistry $clientRegistry;
@@ -29,6 +31,7 @@ class GoogleAuthenticator extends OAuth2Authenticator
     private RouterInterface $router;
     private JWTTokenManagerInterface $jwtManager;
     private UserProviderInterface $userProvider;
+
 
     public function __construct(ClientRegistry $clientRegistry, EntityManagerInterface $entityManager, RouterInterface $router, JWTTokenManagerInterface $jwtManager, UserProviderInterface $userProvider)
     {
@@ -89,15 +92,21 @@ class GoogleAuthenticator extends OAuth2Authenticator
         $googleId = $user->getGoogleId();
         $userId = $user->getId();
 
-
         $data = [
             'token' => $jwtToken,
             'googleId' => $googleId,
-            'id' => $userId
+            'id' => $userId,
         ];
 
-        return new JsonResponse($data);
+
+        $angularRedirectUrl = 'https://streetnft-market-place-angular.vercel.app/user/connectedUser?' . http_build_query($data);
+
+        // Redirect directly to the Angular URL with parameters in the query string
+        return new RedirectResponse($angularRedirectUrl);
+
     }
+
+
 
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
