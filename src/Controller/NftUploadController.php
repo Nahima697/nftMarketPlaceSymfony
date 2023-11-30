@@ -78,12 +78,6 @@ class NftUploadController
     }
 
 
-    private function imageWebp(string $sourcePath, string $destinationPath): void
-    {
-        $image = imagecreatefromstring(file_get_contents($sourcePath));
-        imagewebp($image, $destinationPath);
-        imagedestroy($image);
-    }
 
 
 }

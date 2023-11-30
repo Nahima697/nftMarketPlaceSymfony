@@ -19,7 +19,7 @@
                 <th>Image</th>
                 <td>
                 <td>
-                    <img class="img-fluid m-3 align-self-center" width="150" height="150" src="http://localhost/nftMarketplace/uploads/{{ nft.image }}" alt="Affiche {{ nft.name }}">
+                    <img class="img-fluid m-3 align-self-center" width="150" height="150" src="{{ asset('uploads/' ~ nft.image) }}" alt="Affiche {{ nft.name }}">
                 </td>
                 </td>
             </tr>

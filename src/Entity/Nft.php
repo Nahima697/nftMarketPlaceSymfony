@@ -137,10 +137,7 @@ class Nft
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
-    #[Groups( ['read:nft'])]
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[ApiFilter(OrderFilter::class)]
-    private ?\DateTimeInterface $saleDate = null;
+
 
     public function getId(): ?int
     {
@@ -261,17 +258,7 @@ class Nft
         return $this;
     }
 
-    public function getSaleDate(): ?\DateTimeInterface
-    {
-        return $this->saleDate;
-    }
 
-    public function setSaleDate(?\DateTimeInterface $saleDate): static
-    {
-        $this->saleDate = $saleDate;
-
-        return $this;
-    }
 
 
 

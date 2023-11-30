@@ -21,7 +21,9 @@
         {% for nft in nfts %}
             <tr>
                 <td>{{ nft.name }}</td>
-                <td>  <img class="img-fluid m-3 align-self-center" width="150" height="150" src="{{ 'http://localhost/nftMarketplace/uploads/' ~ nft.image }}" alt"affiche {{nft.name}}"></td>
+                <td>
+                    <img class="img-fluid m-3 align-self-center" width="150" height="150" src="{{ asset('uploads/' ~ nft.image) }}" alt="affiche {{ nft.name }}">
+                </td>
                 <td>{{ nft.quantity }}</td>
                 <td>{{ nft.dropDate ? nft.dropDate|date('Y-m-d') : '' }}</td>
                 <td>{{ nft.price }}</td>
@@ -40,5 +42,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_nft_new') }}"class="btn btn-success">Creer un nouveau Nft</a>
+    <a href="{{ path('app_nft_new') }}"class="btn btn-success">Créer un nouveau Nft</a>
 {% endblock %}

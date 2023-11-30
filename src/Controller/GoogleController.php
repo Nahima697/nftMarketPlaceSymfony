@@ -10,9 +10,17 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\RouterInterface;
 
 class GoogleController extends AbstractController
 {
+
+    private RouterInterface $router;
+
+    public function __construct(RouterInterface $router)
+    {
+        $this->router = $router;
+    }
 
     #[Route('/connect/google', name: 'connect_google')]
     public function connectAction(ClientRegistry $clientRegistry)
@@ -37,15 +45,17 @@ class GoogleController extends AbstractController
             /** @var \League\OAuth2\Client\Provider\GoogleUser $user */
             $user = $client->fetchUser();
 
-            // do something with all this new power!
-            // e.g. $name = $user->getFirstName();
+            $angularRedirectUrl = 'https://streetnft-market-place-angular.vercel.app/user/connectedUser';
 
-            return new JsonResponse([
-//                'access_token' => $client->getAccessToken(),
-                'id'=>$user->getId(),
-                'avatar'=>$user->getAvatar(),
-                'firstName'=>$user->getFirstName(),
-            ]);
+            // Redirect directly to the Angular URL
+            return new RedirectResponse($angularRedirectUrl);
+
+//            return new JsonResponse([
+////                'access_token' => $client->getAccessToken(),
+//                'id'=>$user->getId(),
+//                'avatar'=>$user->getAvatar(),
+//                'firstName'=>$user->getFirstName(),
+//            ]);
             // ...
         } catch (IdentityProviderAuthenticationException $e) {
             // something went wrong!

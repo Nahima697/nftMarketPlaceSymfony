@@ -19,7 +19,7 @@
             <tr>
                 <td>{{ category.id }}</td>
                 <td>{{ category.wording }}</td>
-                <td>  <img class="img-fluid m-3 align-self-center" width="150" height="150" src="{{ 'http://localhost/nftMarketplace/uploads/' ~ category.image }}" alt"affiche {{category.wording}}"></td>
+                <td>  <img class="img-fluid m-3 align-self-center" width="150" height="150" src="{{ asset('uploads/' ~ category.image) }}" alt="affiche {{category.wording}}"></td>
                 <td>
                     <a href="{{ path('app_category_show', {'id': category.id}) }}" class="btn btn-primary">Voir</a>
                     <a href="{{ path('app_category_edit', {'id': category.id}) }}" class="btn btn-warning">Mettre à jour</a>

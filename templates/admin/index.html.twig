@@ -59,7 +59,7 @@
                 <div class="row">
                     {% for nft in nfts %}
                         <div class="card m-3" style="width: 22rem;">
-                            <img class="img-fluid m-3 align-self-center" width="150" height="150" src="{{ 'http://localhost/nftMarketplace/uploads/' ~ nft.image }}" alt"affiche {{nft.name}}">
+                            <img class="img-fluid m-3 align-self-center" width="150" height="150" src="{{ asset('uploads/' ~ nft.image) }}" alt="affiche {{nft.name}}">
                             <div class="card-body">
                                 <h5 class="card-title text-center">{{ nft.name }}</h5>
                                 <ul>

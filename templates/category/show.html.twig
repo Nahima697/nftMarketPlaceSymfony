@@ -17,7 +17,8 @@
             </tr>
             <tr>
                 <th>Image</th>
-                <td>{{ category.image }}</td>
+                <td>  <img class="img-fluid m-3 align-self-center" width="150" height="150" src="{{ asset('uploads/' ~ category.image) }}" alt="affiche {{category.wording}}"></td>
+
             </tr>
         </tbody>
     </table>

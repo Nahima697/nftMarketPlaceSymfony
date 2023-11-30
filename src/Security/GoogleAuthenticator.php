@@ -89,6 +89,7 @@ class GoogleAuthenticator extends OAuth2Authenticator
         $googleId = $user->getGoogleId();
         $userId = $user->getId();
 
+
         $data = [
             'token' => $jwtToken,
             'googleId' => $googleId,
