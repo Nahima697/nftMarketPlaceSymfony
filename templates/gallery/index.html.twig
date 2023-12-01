@@ -1,20 +1,37 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello GalleryController!{% endblock %}
+{% block title %}Galleryindex{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+    <h1>Gallery index</h1>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nom</th>
+            <th>Description</th>
+            <th>actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for gallery in galleries %}
+            <tr>
+                <td>{{ gallery.id }}</td>
+                <td>{{ gallery.name }}</td>
+                <td>
+                    <a href="{{ path('app_gallery_show', {'id': gallery.id}) }}" class="btn btn-primary">Voir</a>
+                    <a href="{{ path('app_gallery_edit', {'id': gallery.id}) }}" class="btn btn-warning">Mettre à jour</a>
+                    <a href="{{ path('app_gallery_edit', {'id': gallery.id}) }}" class="btn btn-danger">Supprimer</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/Humanbooster/PHP/businessCaseNft/src/Controller/GalleryController.php'|file_link(0) }}">src/Controller/GalleryController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/Humanbooster/PHP/businessCaseNft/templates/gallery/index.html.twig'|file_link(0) }}">templates/gallery/index.html.twig</a></code></li>
-    </ul>
-</div>
+    <a href="{{ path('app_gallery_new') }}" class="btn btn-success">Créer une nouvelle Gallerie</a>
 {% endblock %}

@@ -155,7 +155,7 @@ class Gallery
 
     public function __toString()
     {
-        return (string) $this->getId();
+        return (string) $this->getName();
     }
 
 }

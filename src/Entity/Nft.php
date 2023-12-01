@@ -56,14 +56,12 @@ class Nft
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(groups: ['postValidation'])]
+    #[Assert\NotBlank(message:"Veuillez renseignez un nom")]
     #[Groups( ['galleries:read','categories:read','read:nft','top-creator','write:nft']),
     Assert\Length(min:3)]
     private ?string $name = null;
 
-    #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message:"Veuillez renseignez un nom")]
-
+    #[ORM\Column(length: 255, nullable: true)]
     #[ApiProperty(types: ['https://schema.org/image'])]
     #[Groups( ['galleries:read','categories:read','read:nft','top-creator','read:trend-nft'])]
     private ?string $image = null;
@@ -108,7 +106,7 @@ class Nft
 
     #[ORM\ManyToOne(inversedBy: 'nfts')]
     #[Groups( ['galleries:read','write:nft'])]
-    #[Assert\Choice(callback: 'getCategory')]
+//    #[Assert\Choice(callback: 'getCategory')]
     private ?Category $category = null;
 
     #[ORM\Column]
@@ -119,7 +117,7 @@ class Nft
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     #[Groups( ['read:nft','write:nft','read:trend-nft','top:creator'])]
     #[ApiFilter(OrderFilter::class,properties: ['dropDate' =>'DESC'])]
-    #[Assert\Type(type: 'date', message: 'La date doit être au format date')]
+//    #[Assert\Type(type: 'Date', message: 'La date doit être au format date')]
     private ?\DateTimeInterface $dropDate = null;
 
     #[ORM\Column]
@@ -129,7 +127,7 @@ class Nft
     private ?float $price = null;
 
     #[Groups( ['categories:read','top-creator','write:nft','read:nft'])]
-    #[Assert\Choice(callback: 'getGallery')]
+//    #[Assert\Choice(callback: 'getGallery')]
     #[ORM\ManyToOne(inversedBy: 'nfts')]
     private ?Gallery $gallery = null;
 

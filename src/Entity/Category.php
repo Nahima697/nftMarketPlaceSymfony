@@ -67,9 +67,7 @@ class Category
 
         return $this;
     }
-    public function __toString(){
-        return $this->wording;
-    }
+
     public function getParent(): ?self
     {
         return $this->parent;
@@ -156,6 +154,9 @@ class Category
 
         return $this;
     }
-
+    public function __toString()
+    {
+        return (string) $this->getWording();
+    }
 
 }

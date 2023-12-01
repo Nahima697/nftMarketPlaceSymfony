@@ -36,6 +36,10 @@ services:
         tags:
             - { name: kernel.event_listener, event: lexik_jwt_authentication.on_authentication_success, method: onAuthenticationSuccessResponse }
 
+#   AppBundle\EventListener\RemovedFileListener
+#        arguments: [@doctrine.orm.entity_manager]
+#        tags:
+#            - { name: kernel.event_listener, event: vich_uploader.post_remove, method: onPostRemove }
 
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.

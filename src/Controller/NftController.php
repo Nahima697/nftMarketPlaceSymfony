@@ -10,11 +10,20 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Vich\UploaderBundle\Handler\UploadHandler;
 
 
 #[Route('/admin/nft')]
 class NftController extends AbstractController
 {
+    private UploadHandler $uploadHandler;
+
+    // Injectez le service dans le constructeur
+    public function __construct(UploadHandler $uploadHandler)
+    {
+        $this->uploadHandler = $uploadHandler;
+    }
+
     #[Route('/', name: 'app_nft_index', methods: ['GET'])]
     public function index(NftRepository $nftRepository): Response
     {
@@ -31,8 +40,15 @@ class NftController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($nft);
-            $entityManager->flush();
+            $imageFile = $form->get('image')->getData();
+            if ($imageFile) {
+             $nft->setFile($imageFile);
+
+                $entityManager->persist($nft);
+                $entityManager->flush();
+            }
+
+
 
             return $this->redirectToRoute('app_nft_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -58,6 +74,11 @@ class NftController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            if ($nft->getFile()) {
+
+                $this->uploadHandler->upload($nft, 'image');
+            }
+
             $entityManager->flush();
 
             return $this->redirectToRoute('app_nft_index', [], Response::HTTP_SEE_OTHER);
@@ -69,14 +90,20 @@ class NftController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_nft_delete', methods: ['DELETE'])]
+    #[Route('/{id}', name: 'app_nft_delete', methods: ['POST'])]
     public function delete(Request $request, Nft $nft, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$nft->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $nft->getId(), $request->request->get('_token'))) {
+            if ($nft->getFile()) {
+
+                $this->uploadHandler->remove($nft, 'file');
+            }
+
             $entityManager->remove($nft);
             $entityManager->flush();
         }
 
         return $this->redirectToRoute('app_nft_index', [], Response::HTTP_SEE_OTHER);
     }
+
 }
