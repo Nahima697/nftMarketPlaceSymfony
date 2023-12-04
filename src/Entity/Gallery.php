@@ -72,6 +72,13 @@ class Gallery
     private ?string $description = null;
 
 
+    #[ORM\OneToMany(mappedBy: 'buyerGallery', targetEntity: Transaction::class)]
+    private Collection $buyerTransactions;
+
+    #[ORM\OneToMany(mappedBy: 'sellerGallery', targetEntity: Transaction::class)]
+    private Collection $sellerTransactions;
+
+
     #[Groups(['galleries:read','read:nft','top-creator'])]
     public function getId(): ?int
     {
@@ -157,6 +164,59 @@ class Gallery
     {
         return (string) $this->getName();
     }
+    /**
+     * @return Collection
+     */
+    public function getBuyerTransactions(): Collection
+    {
+        return $this->buyerTransactions;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getSellerTransactions(): Collection
+    {
+        return $this->sellerTransactions;
+    }
+
+    /**
+     * @param int|null $id
+     * @return Gallery
+     */
+    public function setId(?int $id): Gallery
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * @param Collection $nfts
+     */
+    public function setNfts(Collection $nfts): void
+    {
+        $this->nfts = $nfts;
+    }
+
+    /**
+     * @param Collection $buyerTransactions
+     */
+    public function setBuyerTransactions(Collection $buyerTransactions): void
+    {
+        $this->buyerTransactions = $buyerTransactions;
+    }
+
+    /**
+     * @param Collection $sellerTransactions
+     */
+    public function setSellerTransactions(Collection $sellerTransactions): void
+    {
+        $this->sellerTransactions = $sellerTransactions;
+    }
+
+
+
+
 
 }
 

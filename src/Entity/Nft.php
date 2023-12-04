@@ -8,6 +8,8 @@ use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\Get;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Symfony\Component\HttpFoundation\File\File;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
@@ -49,10 +51,11 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 #[Vich\Uploadable]
 class Nft
 {
-    #[Groups(['read:nft','top-creator','galleries:read'])]
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['read:nft','top-creator','galleries:read','write:transaction','read:transaction'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
@@ -106,7 +109,6 @@ class Nft
 
     #[ORM\ManyToOne(inversedBy: 'nfts')]
     #[Groups( ['galleries:read','write:nft'])]
-//    #[Assert\Choice(callback: 'getCategory')]
     private ?Category $category = null;
 
     #[ORM\Column]
@@ -117,7 +119,6 @@ class Nft
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     #[Groups( ['read:nft','write:nft','read:trend-nft','top:creator'])]
     #[ApiFilter(OrderFilter::class,properties: ['dropDate' =>'DESC'])]
-//    #[Assert\Type(type: 'Date', message: 'La date doit être au format date')]
     private ?\DateTimeInterface $dropDate = null;
 
     #[ORM\Column]
@@ -127,13 +128,15 @@ class Nft
     private ?float $price = null;
 
     #[Groups( ['categories:read','top-creator','write:nft','read:nft'])]
-//    #[Assert\Choice(callback: 'getGallery')]
     #[ORM\ManyToOne(inversedBy: 'nfts')]
     private ?Gallery $gallery = null;
 
     #[Groups( ['read:nft','write:nft'])]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
+
+
+
 
 
 
@@ -250,6 +253,8 @@ class Nft
 
         return $this;
     }
+
+
 
 
 

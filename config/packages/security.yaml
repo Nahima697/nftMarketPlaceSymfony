@@ -71,6 +71,7 @@ security:
         - { path: ^/api/galleries, method: GET, roles: PUBLIC_ACCESS }
         - { path: ^/api/galleries, methods: POST, roles: ROLE_USER }
         - { path: ^/api/nfts, methods: POST, roles: ROLE_USER}
+        - { path: ^/api/transactions, methods: POST, roles: PUBLIC_ACCESS }
         - { path: ^/api/users, methods: POST, roles: PUBLIC_ACCESS}
         - { path: ^/api/nfts, methods: DELETE, roles: ROLE_USER }
         - { path: ^/api/users, methods: GET , roles: IS_AUTHENTICATED_ANONYMOUSLY }

@@ -43,7 +43,7 @@ class GalleryController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_gallery_new', methods: ['GET', 'POST'])]
+    #[Route('/admin/gallery/new', name: 'app_gallery_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $gallery = new Gallery();
@@ -61,7 +61,7 @@ class GalleryController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_gallery_show', methods: ['GET'])]
+    #[Route('admin/gallery/{id}', name: 'app_gallery_show', methods: ['GET'])]
     public function show(Gallery $gallery): Response
     {
         return $this->render('gallery/show.html.twig', [
@@ -69,7 +69,7 @@ class GalleryController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_gallery_edit', methods: ['GET', 'POST'])]
+    #[Route('admin/gallery/{id}/edit', name: 'app_gallery_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Gallery $gallery, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(GalleryType::class, $gallery);
@@ -87,7 +87,7 @@ class GalleryController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_gallery_delete', methods: ['POST'])]
+    #[Route('admin/gallery/{id}', name: 'app_gallery_delete', methods: ['POST'])]
     public function delete(Request $request, Gallery $gallery, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$gallery->getId(), $request->request->get('_token'))) {

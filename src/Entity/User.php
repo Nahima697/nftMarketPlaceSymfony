@@ -48,10 +48,11 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
 
-    #[Groups(['top-creator','read:nft'])]
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['top-creator','read:nft'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
@@ -90,8 +91,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $email = null;
 
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Wallet::class, orphanRemoval: true)]
-    private Collection $wallets;
 
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Gallery::class, fetch: "LAZY", orphanRemoval: true)]
     #[Groups(['top-creator'])]
@@ -163,7 +162,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
 
-//    #[Groups(['read:nft'])]
+
     public function getUsername(): ?string
     {
         return $this->username;
@@ -277,35 +276,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
 
-    /**
-     * @return Collection<int, Wallet>
-     */
-    public function getWallets(): Collection
-    {
-        return $this->wallets;
-    }
 
-    public function addWallet(Wallet $wallet): static
-    {
-        if (!$this->wallets->contains($wallet)) {
-            $this->wallets->add($wallet);
-            $wallet->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeWallet(Wallet $wallet): static
-    {
-        if ($this->wallets->removeElement($wallet)) {
-            // set the owning side to null (unless already changed)
-            if ($wallet->getUser() === $this) {
-                $wallet->setUser(null);
-            }
-        }
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, Gallery>
